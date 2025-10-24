@@ -18,6 +18,10 @@ import {
   Table as TableIcon
 } from "lucide-react";
 import { CustomersView } from "@/components/customers/CustomersView";
+import { VenuesView } from "@/components/venues/VenuesView";
+import { GigsView } from "@/components/gigs/GigsView";
+import { DJsView } from "@/components/djs/DJsView";
+import { BillingView } from "@/components/billing/BillingView";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -126,51 +130,19 @@ const Dashboard = () => {
               </TabsContent>
 
               <TabsContent value="venues">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Venues</CardTitle>
-                    <CardDescription>Manage your event venues</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground">Venue management coming soon...</p>
-                  </CardContent>
-                </Card>
+                <VenuesView />
               </TabsContent>
 
               <TabsContent value="gigs">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Gigs</CardTitle>
-                    <CardDescription>Schedule and manage events</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground">Gig management coming soon...</p>
-                  </CardContent>
-                </Card>
+                <GigsView />
               </TabsContent>
 
               <TabsContent value="djs">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>DJ Profiles</CardTitle>
-                    <CardDescription>Manage DJ information and documents</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground">DJ management coming soon...</p>
-                  </CardContent>
-                </Card>
+                <DJsView />
               </TabsContent>
 
               <TabsContent value="billing">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Billing & Payments</CardTitle>
-                    <CardDescription>Track invoices and payouts</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground">Billing management coming soon...</p>
-                  </CardContent>
-                </Card>
+                <BillingView />
               </TabsContent>
             </Tabs>
           ) : (

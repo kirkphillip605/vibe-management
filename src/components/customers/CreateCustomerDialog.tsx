@@ -15,9 +15,10 @@ import { Label } from "@/components/ui/label";
 interface CreateCustomerDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onCustomerCreated?: (customerId: string) => void;
 }
 
-export const CreateCustomerDialog = ({ open, onOpenChange }: CreateCustomerDialogProps) => {
+export const CreateCustomerDialog = ({ open, onOpenChange, onCustomerCreated }: CreateCustomerDialogProps) => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -46,14 +47,16 @@ export const CreateCustomerDialog = ({ open, onOpenChange }: CreateCustomerDialo
         zip: formData.zip,
       };
 
-      const { error } = await supabase.from("customers").insert({
+      const { data, error } = await supabase.from("customers").insert({
         full_name: formData.full_name,
         business_name: formData.business_name || null,
         email: formData.email,
         phone: formData.phone,
         billing_address: billingAddress,
         created_by: user.id,
-      });
+      })
+      .select()
+      .single();
 
       if (error) throw error;
 
@@ -61,6 +64,10 @@ export const CreateCustomerDialog = ({ open, onOpenChange }: CreateCustomerDialo
         title: "Customer created",
         description: "The customer has been added successfully.",
       });
+
+      if (onCustomerCreated) {
+        onCustomerCreated(data.id);
+      }
 
       onOpenChange(false);
       setFormData({
@@ -74,7 +81,9 @@ export const CreateCustomerDialog = ({ open, onOpenChange }: CreateCustomerDialo
         zip: "",
       });
       
-      window.location.reload();
+      if (!onCustomerCreated) {
+        window.location.reload();
+      }
     } catch (error: any) {
       toast({
         variant: "destructive",
