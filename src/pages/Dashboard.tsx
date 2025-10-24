@@ -82,7 +82,11 @@ const Dashboard = () => {
                 <Disc3 className="h-6 w-6 text-primary-foreground" />
               </div>
               <div>
-                <h1 className="text-xl font-bold">Entertainment Manager</h1>
+                {userRole === "admin" ? (
+                <h1 className="text-xl font-bold">Vibe Mnagement Platform</h1>
+                ) : (
+                <h1 className="text-xl font-bold">Vibe DJ Dashboard</h1>
+                )
                 <p className="text-xs text-muted-foreground">
                   {userRole === "admin" ? "Admin Dashboard" : "DJ Dashboard"}
                 </p>
