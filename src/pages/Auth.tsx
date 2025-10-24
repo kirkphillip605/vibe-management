@@ -82,12 +82,12 @@ const Auth = () => {
               <Music className="h-8 w-8 text-primary-foreground" />
             </div>
             <CardTitle className="text-3xl font-bold">Vibe Management Platform</CardTitle>
-            <CardDescription>The Vibe Management Platform provides a centralized system to manage Customers, Gig's and Employees. DJ's can use this system to view scheduled Gigs assigned to them.</CardDescription>
+            <CardDescription>Authorized Vibe Karaoke & DJ personnel only. Unauthorized use is prohibited.</CardDescription>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="signin" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="signin">Platform Sign In</TabsTrigger>
+                <TabsTrigger value="signin">Sign In</TabsTrigger>
                 <TabsTrigger value="signup">DJ Registration</TabsTrigger>
               </TabsList>
               
