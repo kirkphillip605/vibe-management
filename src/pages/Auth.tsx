@@ -81,24 +81,24 @@ const Auth = () => {
             <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary">
               <Music className="h-8 w-8 text-primary-foreground" />
             </div>
-            <CardTitle className="text-3xl font-bold">Entertainment Manager</CardTitle>
-            <CardDescription>Sign in to manage your karaoke and DJ operations</CardDescription>
+            <CardTitle className="text-3xl font-bold">Vibe Management Platform</CardTitle>
+            <CardDescription>The Vibe Management Platform provides a centralized system to manage Customers, Gig's and Employees. DJ's can use this system to view scheduled Gigs assigned to them.</CardDescription>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="signin" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="signin">Sign In</TabsTrigger>
-                <TabsTrigger value="signup">Sign Up</TabsTrigger>
+                <TabsTrigger value="signin">Platform Sign In</TabsTrigger>
+                <TabsTrigger value="signup">DJ Registration</TabsTrigger>
               </TabsList>
               
               <TabsContent value="signin">
                 <form onSubmit={handleSignIn} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="signin-email">Email</Label>
+                    <Label htmlFor="signin-email">Email Address</Label>
                     <Input
                       id="signin-email"
                       type="email"
-                      placeholder="you@example.com"
+                      placeholder="user@example.com"
                       value={signInEmail}
                       onChange={(e) => setSignInEmail(e.target.value)}
                       required
@@ -134,7 +134,7 @@ const Auth = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="signup-email">Email</Label>
+                    <Label htmlFor="signup-email">Email Address</Label>
                     <Input
                       id="signup-email"
                       type="email"
@@ -156,7 +156,7 @@ const Auth = () => {
                     />
                   </div>
                   <Button type="submit" className="w-full" disabled={loading}>
-                    {loading ? "Creating account..." : "Create Account"}
+                    {loading ? "Creating account..." : "Create DJ Account"}
                   </Button>
                 </form>
               </TabsContent>
