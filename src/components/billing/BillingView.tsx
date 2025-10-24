@@ -1,18 +1,28 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/table";
+import { Badge } from "@/components/badge";
 import { DollarSign, TrendingUp, Users, Calendar } from "lucide-react";
+import { Text } from "@/components/text";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+interface Invoice {
+  customers?: { full_name: string };
+  quoted_amount: number;
+  invoiced_amount?: number;
+  amount_received?: number;
+  status: string;
+}
+
+interface Payout {
+  dj_profiles?: { full_name: string };
+  gigs?: { 
+    customers?: { full_name: string };
+    start_datetime?: string;
+  };
+  total_payout: number;
+}
 
 export const BillingView = () => {
   const { toast } = useToast();
@@ -22,8 +32,8 @@ export const BillingView = () => {
     totalReceived: 0,
     pendingPayouts: 0,
   });
-  const [invoices, setInvoices] = useState<any[]>([]);
-  const [payouts, setPayouts] = useState<any[]>([]);
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
+  const [payouts, setPayouts] = useState<Payout[]>([]);
 
   useEffect(() => {
     loadBillingData();
@@ -61,176 +71,153 @@ export const BillingView = () => {
 
       setInvoices(gigs || []);
       setPayouts(assignments || []);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
       toast({
         variant: "destructive",
         title: "Error loading billing data",
-        description: error.message,
+        description: errorMessage,
       });
     }
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Billing & Payments</CardTitle>
-        <CardDescription>Track invoices, payments, and DJ payouts</CardDescription>
-      </CardHeader>
-      <CardContent>
-        {/* Stats Cards */}
-        <div className="grid gap-4 md:grid-cols-4 mb-6">
-          <Card>
-            <CardHeader className="pb-2">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-sm font-medium text-muted-foreground">
-                  Total Quoted
-                </CardTitle>
-                <DollarSign className="h-4 w-4 text-muted-foreground" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">${stats.totalQuoted.toFixed(2)}</div>
-            </CardContent>
-          </Card>
+    <div>
+      <Text className="mb-6">Track invoices, payments, and DJ payouts</Text>
 
-          <Card>
-            <CardHeader className="pb-2">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-sm font-medium text-muted-foreground">
-                  Total Invoiced
-                </CardTitle>
-                <TrendingUp className="h-4 w-4 text-muted-foreground" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">${stats.totalInvoiced.toFixed(2)}</div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-2">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-sm font-medium text-muted-foreground">
-                  Total Received
-                </CardTitle>
-                <Calendar className="h-4 w-4 text-muted-foreground" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-green-600">
-                ${stats.totalReceived.toFixed(2)}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-2">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-sm font-medium text-muted-foreground">
-                  Pending Payouts
-                </CardTitle>
-                <Users className="h-4 w-4 text-muted-foreground" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-amber-600">
-                ${stats.pendingPayouts.toFixed(2)}
-              </div>
-            </CardContent>
-          </Card>
+      {/* Stats Cards */}
+      <div className="grid gap-4 md:grid-cols-4 mb-8">
+        <div className="rounded-lg border border-zinc-950/10 bg-white p-6 dark:border-white/10 dark:bg-zinc-900">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
+              Total Quoted
+            </span>
+            <DollarSign className="h-4 w-4 text-zinc-500 dark:text-zinc-400" />
+          </div>
+          <div className="text-2xl font-bold">${stats.totalQuoted.toFixed(2)}</div>
         </div>
 
-        <Tabs defaultValue="invoices">
-          <TabsList>
-            <TabsTrigger value="invoices">Invoices</TabsTrigger>
-            <TabsTrigger value="payouts">DJ Payouts</TabsTrigger>
-          </TabsList>
+        <div className="rounded-lg border border-zinc-950/10 bg-white p-6 dark:border-white/10 dark:bg-zinc-900">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
+              Total Invoiced
+            </span>
+            <TrendingUp className="h-4 w-4 text-zinc-500 dark:text-zinc-400" />
+          </div>
+          <div className="text-2xl font-bold">${stats.totalInvoiced.toFixed(2)}</div>
+        </div>
 
-          <TabsContent value="invoices">
-            <div className="rounded-md border">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Customer</TableHead>
-                    <TableHead>Quoted</TableHead>
-                    <TableHead>Invoiced</TableHead>
-                    <TableHead>Received</TableHead>
-                    <TableHead>Status</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {invoices.length === 0 ? (
-                    <TableRow>
-                      <TableCell colSpan={5} className="text-center text-muted-foreground">
-                        No invoice data available
-                      </TableCell>
-                    </TableRow>
-                  ) : (
-                    invoices.map((invoice, i) => (
-                      <TableRow key={i}>
-                        <TableCell>{invoice.customers?.full_name || "—"}</TableCell>
-                        <TableCell>${Number(invoice.quoted_amount).toFixed(2)}</TableCell>
-                        <TableCell>
-                          {invoice.invoiced_amount
-                            ? `$${Number(invoice.invoiced_amount).toFixed(2)}`
-                            : "—"}
-                        </TableCell>
-                        <TableCell>
-                          {invoice.amount_received
-                            ? `$${Number(invoice.amount_received).toFixed(2)}`
-                            : "—"}
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="secondary">{invoice.status}</Badge>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  )}
-                </TableBody>
-              </Table>
-            </div>
-          </TabsContent>
+        <div className="rounded-lg border border-zinc-950/10 bg-white p-6 dark:border-white/10 dark:bg-zinc-900">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
+              Total Received
+            </span>
+            <Calendar className="h-4 w-4 text-zinc-500 dark:text-zinc-400" />
+          </div>
+          <div className="text-2xl font-bold text-green-600 dark:text-green-500">
+            ${stats.totalReceived.toFixed(2)}
+          </div>
+        </div>
 
-          <TabsContent value="payouts">
-            <div className="rounded-md border">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>DJ Name</TableHead>
-                    <TableHead>Customer</TableHead>
-                    <TableHead>Event Date</TableHead>
-                    <TableHead>Payout Amount</TableHead>
+        <div className="rounded-lg border border-zinc-950/10 bg-white p-6 dark:border-white/10 dark:bg-zinc-900">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
+              Pending Payouts
+            </span>
+            <Users className="h-4 w-4 text-zinc-500 dark:text-zinc-400" />
+          </div>
+          <div className="text-2xl font-bold text-amber-600 dark:text-amber-500">
+            ${stats.pendingPayouts.toFixed(2)}
+          </div>
+        </div>
+      </div>
+
+      <Tabs defaultValue="invoices">
+        <TabsList>
+          <TabsTrigger value="invoices">Invoices</TabsTrigger>
+          <TabsTrigger value="payouts">DJ Payouts</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="invoices">
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableHeader>Customer</TableHeader>
+                <TableHeader>Quoted</TableHeader>
+                <TableHeader>Invoiced</TableHeader>
+                <TableHeader>Received</TableHeader>
+                <TableHeader>Status</TableHeader>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {invoices.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={5} className="text-center text-zinc-500 dark:text-zinc-400">
+                    No invoice data available
+                  </TableCell>
+                </TableRow>
+              ) : (
+                invoices.map((invoice, i) => (
+                  <TableRow key={i}>
+                    <TableCell>{invoice.customers?.full_name || "—"}</TableCell>
+                    <TableCell>${Number(invoice.quoted_amount).toFixed(2)}</TableCell>
+                    <TableCell>
+                      {invoice.invoiced_amount
+                        ? `$${Number(invoice.invoiced_amount).toFixed(2)}`
+                        : "—"}
+                    </TableCell>
+                    <TableCell>
+                      {invoice.amount_received
+                        ? `$${Number(invoice.amount_received).toFixed(2)}`
+                        : "—"}
+                    </TableCell>
+                    <TableCell>
+                      <Badge color="zinc">{invoice.status}</Badge>
+                    </TableCell>
                   </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {payouts.length === 0 ? (
-                    <TableRow>
-                      <TableCell colSpan={4} className="text-center text-muted-foreground">
-                        No payout data available
-                      </TableCell>
-                    </TableRow>
-                  ) : (
-                    payouts.map((payout, i) => (
-                      <TableRow key={i}>
-                        <TableCell>{payout.dj_profiles?.full_name || "—"}</TableCell>
-                        <TableCell>{payout.gigs?.customers?.full_name || "—"}</TableCell>
-                        <TableCell>
-                          {payout.gigs?.start_datetime
-                            ? new Date(payout.gigs.start_datetime).toLocaleDateString()
-                            : "—"}
-                        </TableCell>
-                        <TableCell className="font-medium">
-                          ${Number(payout.total_payout).toFixed(2)}
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  )}
-                </TableBody>
-              </Table>
-            </div>
-          </TabsContent>
-        </Tabs>
-      </CardContent>
-    </Card>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </TabsContent>
+
+        <TabsContent value="payouts">
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableHeader>DJ Name</TableHeader>
+                <TableHeader>Customer</TableHeader>
+                <TableHeader>Event Date</TableHeader>
+                <TableHeader>Payout Amount</TableHeader>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {payouts.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={4} className="text-center text-zinc-500 dark:text-zinc-400">
+                    No payout data available
+                  </TableCell>
+                </TableRow>
+              ) : (
+                payouts.map((payout, i) => (
+                  <TableRow key={i}>
+                    <TableCell>{payout.dj_profiles?.full_name || "—"}</TableCell>
+                    <TableCell>{payout.gigs?.customers?.full_name || "—"}</TableCell>
+                    <TableCell>
+                      {payout.gigs?.start_datetime
+                        ? new Date(payout.gigs.start_datetime).toLocaleDateString()
+                        : "—"}
+                    </TableCell>
+                    <TableCell className="font-medium">
+                      ${Number(payout.total_payout).toFixed(2)}
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </TabsContent>
+      </Tabs>
+    </div>
   );
 };
