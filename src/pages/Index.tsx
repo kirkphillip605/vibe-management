@@ -14,12 +14,11 @@ const Index = () => {
           </div>
           
           <h1 className="mb-4 text-5xl font-bold tracking-tight">
-            Entertainment Manager
+            Vibe Management Platform
           </h1>
           
           <p className="mb-8 max-w-2xl text-xl text-muted-foreground">
-            Professional management system for karaoke and DJ entertainment operations.
-            Streamline your bookings, track events, manage talent, and handle billing all in one place.
+            A secure system for managing bookings, customers, events, and DJ operations. Authorized access only — for use by Vibe Karaoke & DJ management, employees, and other designated personnel.
           </p>
 
           <div className="flex gap-4">
@@ -34,9 +33,9 @@ const Index = () => {
           <div className="mt-16 grid gap-8 md:grid-cols-3">
             <div className="rounded-xl border bg-card p-6 shadow-sm">
               <Calendar className="mb-4 h-8 w-8 text-primary" />
-              <h3 className="mb-2 text-lg font-semibold">Event Management</h3>
+              <h3 className="mb-2 text-lg font-semibold">Gig Management</h3>
               <p className="text-sm text-muted-foreground">
-                Schedule gigs, track recurring events, and manage your calendar effortlessly.
+                Schedule gigs & manage recurring shows accross multiple venues and customers.
               </p>
             </div>
             
@@ -44,7 +43,7 @@ const Index = () => {
               <Users className="mb-4 h-8 w-8 text-primary" />
               <h3 className="mb-2 text-lg font-semibold">Customer Relations</h3>
               <p className="text-sm text-muted-foreground">
-                Maintain detailed customer profiles, venues, and complete contact history.
+                Maintain detailed customer profiles, venues, contact history, and payment details.
               </p>
             </div>
             
@@ -52,7 +51,7 @@ const Index = () => {
               <Disc3 className="mb-4 h-8 w-8 text-primary" />
               <h3 className="mb-2 text-lg font-semibold">DJ Management</h3>
               <p className="text-sm text-muted-foreground">
-                Assign talent to events, track payouts, and manage DJ profiles and documents.
+                Assign DJ's & staff to events, record payouts, and manage employee/contractor profiles and documents.
               </p>
             </div>
           </div>
